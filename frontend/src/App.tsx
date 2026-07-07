@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   AlertTriangle,
   ArrowUpRight,
@@ -9,8 +10,12 @@ import {
   Hammer,
   ShieldCheck,
   Sparkles,
-  UsersRound
+  UsersRound,
+  Loader2
 } from "lucide-react";
+import { ToastProvider, useToast } from './components/ToastContext';
+import { MetricPanelSkeleton, JobRowSkeleton } from './components/Skeleton';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 type JobState = "Open" | "Active" | "Disputed" | "Completed" | "Refunded";
 
@@ -26,7 +31,7 @@ type Job = {
   hash: string;
 };
 
-const jobs: Job[] = [
+const mockJobs: Job[] = [
   {
     id: "OWO-1042",
     customer: "Ada N.",
@@ -89,7 +94,58 @@ function formatCurrency(value: number) {
   }).format(value);
 }
 
-function App() {
+function AppContent() {
+  const [loading, setLoading] = useState(true);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [creatingJob, setCreatingJob] = useState(false);
+  const { addToast } = useToast();
+
+  // Simulate API fetch
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setJobs(mockJobs);
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCreateJob = async () => {
+    setCreatingJob(true);
+    // Simulate API call
+    setTimeout(() => {
+      const newJob: Job = {
+        id: `OWO-${1000 + Math.floor(Math.random() * 999)}`,
+        customer: "New Customer",
+        artisan: "New Artisan",
+        trade: "General",
+        state: "Open",
+        amount: Math.floor(Math.random() * 500) + 100,
+        started: new Date().toLocaleTimeString(),
+        location: "Lagos",
+        hash: Math.random().toString(36).substring(2, 8)
+      };
+      setJobs(prev => [...prev, newJob]);
+      setCreatingJob(false);
+      addToast({
+        type: "success",
+        message: "Job created successfully!"
+      });
+    }, 2000);
+  };
+
+  const simulateError = () => {
+    addToast({
+      type: "error",
+      message: "Network error occurred. Please check your connection.",
+      onRetry: () => {
+        addToast({
+          type: "info",
+          message: "Retrying..."
+        });
+      }
+    });
+  };
+
   const activeValue = jobs.reduce((total, job) => total + job.amount, 0);
   const activeJobs = jobs.filter((job) => job.state === "Active").length;
   const disputes = jobs.filter((job) => job.state === "Disputed").length;
@@ -122,37 +178,60 @@ function App() {
             <p className="eyebrow">Escrow desk</p>
             <h1>OwoWork settlement board</h1>
           </div>
-          <button className="primary-action">
-            <Sparkles size={18} />
-            New job
-          </button>
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button className="ghost-action" onClick={simulateError}>
+              Test Error
+            </button>
+            <button 
+              className="primary-action" 
+              onClick={handleCreateJob}
+              disabled={creatingJob}
+            >
+              {creatingJob ? (
+                <Loader2 size={18} className="loading-spinner" />
+              ) : (
+                <Sparkles size={18} />
+              )}
+              {creatingJob ? "Creating..." : "New job"}
+            </button>
+          </div>
         </header>
 
         <section className="overview-grid" aria-label="Marketplace overview">
-          <article className="metric-panel loud">
-            <span className="metric-icon">
-              <ShieldCheck size={22} />
-            </span>
-            <p>Locked value</p>
-            <strong>{formatCurrency(activeValue)}</strong>
-            <small>Across {jobs.length} on-chain job records</small>
-          </article>
-          <article className="metric-panel">
-            <span className="metric-icon ink">
-              <Hammer size={22} />
-            </span>
-            <p>Active jobs</p>
-            <strong>{activeJobs}</strong>
-            <small>Accepted and in progress</small>
-          </article>
-          <article className="metric-panel">
-            <span className="metric-icon warn">
-              <AlertTriangle size={22} />
-            </span>
-            <p>Disputes</p>
-            <strong>{disputes}</strong>
-            <small>48 hour resolution window</small>
-          </article>
+          {loading ? (
+            <>
+              <MetricPanelSkeleton />
+              <MetricPanelSkeleton />
+              <MetricPanelSkeleton />
+            </>
+          ) : (
+            <>
+              <article className="metric-panel loud">
+                <span className="metric-icon">
+                  <ShieldCheck size={22} />
+                </span>
+                <p>Locked value</p>
+                <strong>{formatCurrency(activeValue)}</strong>
+                <small>Across {jobs.length} on-chain job records</small>
+              </article>
+              <article className="metric-panel">
+                <span className="metric-icon ink">
+                  <Hammer size={22} />
+                </span>
+                <p>Active jobs</p>
+                <strong>{activeJobs}</strong>
+                <small>Accepted and in progress</small>
+              </article>
+              <article className="metric-panel">
+                <span className="metric-icon warn">
+                  <AlertTriangle size={22} />
+                </span>
+                <p>Disputes</p>
+                <strong>{disputes}</strong>
+                <small>48 hour resolution window</small>
+              </article>
+            </>
+          )}
         </section>
 
         <section className="content-grid">
@@ -169,28 +248,37 @@ function App() {
             </div>
 
             <div className="job-list">
-              {jobs.map((job) => (
-                <article className="job-row" key={job.id}>
-                  <div className="job-token">
-                    <span>{job.trade.slice(0, 2).toUpperCase()}</span>
-                  </div>
-                  <div className="job-main">
-                    <div>
-                      <h3>{job.id}</h3>
-                      <p>
-                        {job.customer} to {job.artisan} - {job.location}
-                      </p>
+              {loading ? (
+                <>
+                  <JobRowSkeleton />
+                  <JobRowSkeleton />
+                  <JobRowSkeleton />
+                  <JobRowSkeleton />
+                </>
+              ) : (
+                jobs.map((job) => (
+                  <article className="job-row" key={job.id}>
+                    <div className="job-token">
+                      <span>{job.trade.slice(0, 2).toUpperCase()}</span>
                     </div>
-                    <code>sha:{job.hash}</code>
-                  </div>
-                  <div className="job-meta">
-                    <strong>{formatCurrency(job.amount)}</strong>
-                    <span className={`state-pill ${stateMeta[job.state].className}`}>
-                      {stateMeta[job.state].label}
-                    </span>
-                  </div>
-                </article>
-              ))}
+                    <div className="job-main">
+                      <div>
+                        <h3>{job.id}</h3>
+                        <p>
+                          {job.customer} to {job.artisan} - {job.location}
+                        </p>
+                      </div>
+                      <code>sha:{job.hash}</code>
+                    </div>
+                    <div className="job-meta">
+                      <strong>{formatCurrency(job.amount)}</strong>
+                      <span className={`state-pill ${stateMeta[job.state].className}`}>
+                        {stateMeta[job.state].label}
+                      </span>
+                    </div>
+                  </article>
+                ))
+              )}
             </div>
           </article>
 
@@ -231,6 +319,16 @@ function App() {
         </section>
       </section>
     </main>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }
 
