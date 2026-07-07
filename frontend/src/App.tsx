@@ -14,22 +14,19 @@ import {
   Loader2
 } from "lucide-react";
 import { ToastProvider, useToast } from './components/ToastContext';
-import { MetricPanelSkeleton, JobRowSkeleton } from './components/Skeleton';
+import { MetricPanelSkeleton } from './components/Skeleton';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { JobList, Job } from './components/JobList';
+import { MetricPanel } from './components/MetricPanel';
+import { JobRow } from './components/JobRow';
 
-type JobState = "Open" | "Active" | "Disputed" | "Completed" | "Refunded";
-
-type Job = {
-  id: string;
-  customer: string;
-  artisan: string;
-  trade: string;
-  state: JobState;
-  amount: number;
-  started: string;
-  location: string;
-  hash: string;
-};
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0
+  }).format(value);
+}
 
 const mockJobs: Job[] = [
   {
@@ -77,22 +74,6 @@ const mockJobs: Job[] = [
     hash: "c40a12"
   }
 ];
-
-const stateMeta: Record<JobState, { label: string; className: string }> = {
-  Open: { label: "Open", className: "state-open" },
-  Active: { label: "Active", className: "state-active" },
-  Disputed: { label: "Disputed", className: "state-disputed" },
-  Completed: { label: "Completed", className: "state-completed" },
-  Refunded: { label: "Refunded", className: "state-refunded" }
-};
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0
-  }).format(value);
-}
 
 function AppContent() {
   const [loading, setLoading] = useState(true);
@@ -153,21 +134,21 @@ function AppContent() {
   return (
     <main className="shell">
       <aside className="sidebar" aria-label="OwoWork navigation">
-        <div className="brand-mark">
+        <div className="brand-mark" aria-label="OwoWork brand">
           <span>OW</span>
         </div>
-        <nav className="rail" aria-label="Primary">
-          <button className="rail-button active" aria-label="Jobs">
-            <BriefcaseBusiness size={20} />
+        <nav className="rail" aria-label="Primary navigation">
+          <button className="rail-button active" aria-label="Jobs" aria-current="page">
+            <BriefcaseBusiness size={20} aria-hidden="true" />
           </button>
           <button className="rail-button" aria-label="Artisans">
-            <UsersRound size={20} />
+            <UsersRound size={20} aria-hidden="true" />
           </button>
           <button className="rail-button" aria-label="Settlements">
-            <CircleDollarSign size={20} />
+            <CircleDollarSign size={20} aria-hidden="true" />
           </button>
           <button className="rail-button" aria-label="Disputes">
-            <Gavel size={20} />
+            <Gavel size={20} aria-hidden="true" />
           </button>
         </nav>
       </aside>
@@ -179,25 +160,31 @@ function AppContent() {
             <h1>OwoWork settlement board</h1>
           </div>
           <div style={{ display: "flex", gap: "12px" }}>
-            <button className="ghost-action" onClick={simulateError}>
+            <button 
+              className="ghost-action" 
+              onClick={simulateError}
+              aria-label="Test error notification"
+            >
               Test Error
             </button>
             <button 
               className="primary-action" 
               onClick={handleCreateJob}
               disabled={creatingJob}
+              aria-label={creatingJob ? "Creating new job" : "Create new job"}
+              aria-busy={creatingJob}
             >
               {creatingJob ? (
-                <Loader2 size={18} className="loading-spinner" />
+                <Loader2 size={18} className="loading-spinner" aria-hidden="true" />
               ) : (
-                <Sparkles size={18} />
+                <Sparkles size={18} aria-hidden="true" />
               )}
               {creatingJob ? "Creating..." : "New job"}
             </button>
           </div>
         </header>
 
-        <section className="overview-grid" aria-label="Marketplace overview">
+        <section className="overview-grid" aria-label="Marketplace overview metrics">
           {loading ? (
             <>
               <MetricPanelSkeleton />
@@ -206,80 +193,45 @@ function AppContent() {
             </>
           ) : (
             <>
-              <article className="metric-panel loud">
-                <span className="metric-icon">
-                  <ShieldCheck size={22} />
-                </span>
-                <p>Locked value</p>
-                <strong>{formatCurrency(activeValue)}</strong>
-                <small>Across {jobs.length} on-chain job records</small>
-              </article>
-              <article className="metric-panel">
-                <span className="metric-icon ink">
-                  <Hammer size={22} />
-                </span>
-                <p>Active jobs</p>
-                <strong>{activeJobs}</strong>
-                <small>Accepted and in progress</small>
-              </article>
-              <article className="metric-panel">
-                <span className="metric-icon warn">
-                  <AlertTriangle size={22} />
-                </span>
-                <p>Disputes</p>
-                <strong>{disputes}</strong>
-                <small>48 hour resolution window</small>
-              </article>
+              <MetricPanel 
+                loud
+                icon={<ShieldCheck size={22} aria-hidden="true" />}
+                title="Locked value"
+                value={formatCurrency(activeValue)}
+                subtitle={`Across ${jobs.length} on-chain job records`}
+              />
+              <MetricPanel 
+                icon={<Hammer size={22} aria-hidden="true" />}
+                iconVariant="ink"
+                title="Active jobs"
+                value={activeJobs}
+                subtitle="Accepted and in progress"
+              />
+              <MetricPanel 
+                icon={<AlertTriangle size={22} aria-hidden="true" />}
+                iconVariant="warn"
+                title="Disputes"
+                value={disputes}
+                subtitle="48 hour resolution window"
+              />
             </>
           )}
         </section>
 
         <section className="content-grid">
-          <article className="job-panel">
+          <article className="job-panel" aria-label="Jobs list">
             <div className="section-heading">
               <div>
                 <p className="eyebrow">Live book</p>
                 <h2>Jobs moving through escrow</h2>
               </div>
-              <button className="ghost-action">
+              <button className="ghost-action" aria-label="View all jobs">
                 View all
-                <ArrowUpRight size={17} />
+                <ArrowUpRight size={17} aria-hidden="true" />
               </button>
             </div>
 
-            <div className="job-list">
-              {loading ? (
-                <>
-                  <JobRowSkeleton />
-                  <JobRowSkeleton />
-                  <JobRowSkeleton />
-                  <JobRowSkeleton />
-                </>
-              ) : (
-                jobs.map((job) => (
-                  <article className="job-row" key={job.id}>
-                    <div className="job-token">
-                      <span>{job.trade.slice(0, 2).toUpperCase()}</span>
-                    </div>
-                    <div className="job-main">
-                      <div>
-                        <h3>{job.id}</h3>
-                        <p>
-                          {job.customer} to {job.artisan} - {job.location}
-                        </p>
-                      </div>
-                      <code>sha:{job.hash}</code>
-                    </div>
-                    <div className="job-meta">
-                      <strong>{formatCurrency(job.amount)}</strong>
-                      <span className={`state-pill ${stateMeta[job.state].className}`}>
-                        {stateMeta[job.state].label}
-                      </span>
-                    </div>
-                  </article>
-                ))
-              )}
-            </div>
+            <JobList jobs={jobs} loading={loading} />
           </article>
 
           <aside className="side-stack">
@@ -296,7 +248,7 @@ function AppContent() {
 
             <article className="reputation-panel">
               <div className="rep-header">
-                <BadgeCheck size={22} />
+                <BadgeCheck size={22} aria-hidden="true" />
                 <div>
                   <h2>Artisan signal</h2>
                   <p>Reputation updates after settlement.</p>
@@ -309,7 +261,7 @@ function AppContent() {
               </div>
               <div className="rep-footer">
                 <span>
-                  <Clock3 size={16} />
+                  <Clock3 size={16} aria-hidden="true" />
                   48h dispute timer
                 </span>
                 <strong>91%</strong>

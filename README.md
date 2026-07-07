@@ -150,7 +150,57 @@ cd frontend
 npm run dev
 npm run build
 npm run preview
+npm run test          # Run tests in watch mode
+npm run test:ci      # Run tests once (for CI)
+npm run test:coverage # Run tests with coverage
 ```
+
+## Testing
+
+### Frontend Tests
+
+The frontend uses **Vitest** and **React Testing Library** for unit and component tests.
+
+- **Component tests** are located alongside components (e.g., `JobRow.test.tsx` next to `JobRow.tsx`)
+- **Testing utilities**: `@testing-library/react` for rendering, `@testing-library/user-event` for user interactions
+- **Accessibility checks**: Use axe-core for automated accessibility testing
+
+### Running Tests
+
+```bash
+cd frontend
+npm test                # Watch mode
+npm run test:ci         # Single run (for CI)
+npm run test:coverage   # Generate coverage report
+```
+
+### Pre-commit Hooks
+
+Husky + lint-staged automatically runs relevant tests before commits:
+
+```json
+// .lintstagedrc.json
+{
+  "*.{ts,tsx}": ["vitest related --run"]
+}
+```
+
+## Accessibility
+
+The frontend is designed to meet **WCAG 2.1 AA standards**:
+
+- ✅ **Keyboard navigation**: All interactive elements are reachable and usable via keyboard (Tab, Enter, Escape)
+- ✅ **Screen reader support**: Semantic HTML and ARIA attributes
+- ✅ **Color contrast**: WCAG 2.1 AA compliant contrast ratios
+- ✅ **Form labels**: All inputs have proper associated labels
+- ✅ **Heading hierarchy**: Proper semantic heading levels (h1, h2, h3)
+
+### Accessibility Testing Tools
+
+- **axe-core**: Automated accessibility testing in tests
+- **Browser DevTools**: Lighthouse for accessibility audits
+
+
 
 Recommended next steps:
 
