@@ -77,6 +77,15 @@ function AppContent() {
           </div>
         )}
       </section>
+
+      {/* Job creation form modal */}
+      {showJobForm && (
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Create new job">
+          <div className="modal-body">
+            <JobForm onCancel={handleCloseJobForm} onSuccess={handleJobSuccess} />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
