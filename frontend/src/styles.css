@@ -736,3 +736,785 @@ h3 {
 .error-troubleshoot li {
   margin-bottom: 8px;
 }
+
+/* ─────────────────────────────────────────────────────────
+   STAR RATING
+───────────────────────────────────────────────────────── */
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  --star-fill: #f4bd2f;
+  --star-empty: #d0c9b3;
+}
+
+.star-label {
+  margin-left: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   TRADE TAGS
+───────────────────────────────────────────────────────── */
+.trade-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: #f1e7ca;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--green-deep);
+}
+
+.trade-tag-lg {
+  padding: 5px 13px;
+  font-size: 0.84rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ARTISAN CARD
+───────────────────────────────────────────────────────── */
+.artisan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-strong);
+  box-shadow: var(--shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.artisan-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 12px 12px 0 var(--ink);
+}
+
+.artisan-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.artisan-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.artisan-card-identity {
+  min-width: 0;
+}
+
+.artisan-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.artisan-name-row h3 {
+  font-size: 1rem;
+}
+
+.verified-icon {
+  color: var(--cobalt);
+  flex-shrink: 0;
+}
+
+.artisan-card-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.artisan-card-trades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.artisan-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(23, 33, 29, 0.16);
+  border-radius: 8px;
+  background: rgba(241, 231, 202, 0.5);
+}
+
+.artisan-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.success-rate {
+  color: var(--green);
+}
+
+.artisan-stat-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(23, 33, 29, 0.2);
+  flex-shrink: 0;
+}
+
+.artisan-card-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.artisan-card-btn {
+  min-height: 38px;
+  font-size: 0.9rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ARTISANS BROWSE VIEW
+───────────────────────────────────────────────────────── */
+.artisans-view {
+  padding-top: 10px;
+}
+
+.artisans-header {
+  margin-bottom: 28px;
+}
+
+.artisans-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-strong);
+}
+
+.artisans-search-wrap {
+  position: relative;
+  flex: 1 1 260px;
+}
+
+.artisans-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.artisans-search {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 14px 0 38px;
+  border: 1.5px solid rgba(23, 33, 29, 0.3);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 180ms ease;
+}
+
+.artisans-search:focus {
+  border-color: var(--cobalt);
+}
+
+.artisans-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.artisans-select {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1.5px solid rgba(23, 33, 29, 0.3);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 180ms ease;
+}
+
+.artisans-select:focus {
+  border-color: var(--cobalt);
+}
+
+.artisans-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.artisans-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--green);
+}
+
+.artisans-count {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.artisans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 22px;
+}
+
+.artisans-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 64px 24px;
+  border: 2px dashed rgba(23, 33, 29, 0.24);
+  border-radius: 8px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ARTISAN PROFILE PAGE
+───────────────────────────────────────────────────────── */
+.profile-page {
+  padding-top: 10px;
+}
+
+.profile-back {
+  margin-bottom: 24px;
+  min-height: 38px;
+  font-size: 0.9rem;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+/* ── Identity card ── */
+.profile-id-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-strong);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 24px;
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  color: white;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-name {
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  line-height: 1;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--cobalt);
+  border-radius: 999px;
+  background: rgba(49, 89, 255, 0.1);
+  color: var(--cobalt);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.profile-bio {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.profile-meta-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-meta-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.profile-meta-list li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.profile-pubkey code {
+  font-size: 0.82rem;
+  color: var(--green-deep);
+  word-break: break-all;
+}
+
+.profile-trades-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.profile-trade-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-hire-btn {
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+/* ── Reputation metric cards ── */
+.rep-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.rep-metric-card {
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-strong);
+}
+
+.rep-metric-card p {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.rep-metric-card strong {
+  display: block;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.rep-metric-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 8px;
+}
+
+.rep-metric-loud {
+  background: var(--green);
+  color: white;
+}
+
+.rep-metric-loud p {
+  color: rgba(255,255,255,0.75);
+}
+
+.rep-metric-loud strong {
+  color: white;
+}
+
+.rep-metric-icon {
+  display: grid;
+  width: 36px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1.5px solid currentColor;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.15);
+}
+
+.rep-metric-icon.warn {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.rep-stars {
+  --star-fill: rgba(255,255,255,0.9);
+  --star-empty: rgba(255,255,255,0.35);
+}
+
+.rep-progress-bar {
+  height: 10px;
+  border: 1.5px solid rgba(23, 33, 29, 0.2);
+  border-radius: 999px;
+  background: #f1e7ca;
+  overflow: hidden;
+}
+
+.rep-progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 999px;
+  transition: width 600ms ease;
+}
+
+/* ── Profile tabs ── */
+.profile-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--line);
+}
+
+.profile-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+  margin-bottom: -2px;
+}
+
+.profile-tab:hover {
+  background: rgba(23, 33, 29, 0.06);
+  color: var(--ink);
+}
+
+.profile-tab.active {
+  background: var(--paper-strong);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(23, 33, 29, 0.1);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.tab-count-warn {
+  background: #ff9aaa;
+  color: var(--ink);
+}
+
+/* ── Completed jobs list ── */
+.profile-job-list {
+  display: grid;
+  gap: 10px;
+}
+
+.profile-job-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1.5px solid rgba(23, 33, 29, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.55);
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.profile-job-row:hover {
+  transform: translateX(4px);
+  border-color: var(--ink);
+}
+
+.profile-job-token {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--orange);
+  font-weight: 800;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.profile-job-info {
+  min-width: 0;
+}
+
+.profile-job-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.profile-job-id {
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.profile-job-customer {
+  margin: 0 0 5px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.profile-job-customer strong {
+  color: var(--ink);
+}
+
+.profile-job-review {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.profile-job-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.profile-job-amount {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.profile-job-date {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ── Dispute list ── */
+.profile-dispute-list {
+  display: grid;
+  gap: 12px;
+}
+
+.profile-dispute-row {
+  padding: 16px;
+  border: 1.5px solid rgba(23, 33, 29, 0.16);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.55);
+}
+
+.profile-dispute-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.profile-dispute-id {
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.dispute-outcome-pill {
+  display: inline-flex;
+  padding: 4px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.outcome-artisan {
+  background: #86ddb2;
+}
+
+.outcome-customer {
+  background: #ff9aaa;
+}
+
+.outcome-settled {
+  background: #9bd9ff;
+}
+
+.outcome-pending {
+  background: #f7e28b;
+}
+
+.profile-dispute-job {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.profile-dispute-job strong {
+  color: var(--ink);
+}
+
+.profile-dispute-summary {
+  margin: 0 0 8px;
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.profile-dispute-date {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ── Empty states ── */
+.profile-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 56px 24px;
+  border: 2px dashed rgba(23, 33, 29, 0.22);
+  border-radius: 8px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.profile-empty-good {
+  color: var(--green);
+  border-color: rgba(15, 143, 95, 0.3);
+}
+
+/* ─────────────────────────────────────────────────────────
+   PLACEHOLDER VIEW (settlements / disputes stubs)
+───────────────────────────────────────────────────────── */
+.placeholder-view {
+  padding-top: 10px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   RESPONSIVE — PROFILE
+───────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .rep-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-id-card {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .rep-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .profile-job-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .profile-job-right {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .artisans-grid {
+    grid-template-columns: 1fr;
+  }
+}

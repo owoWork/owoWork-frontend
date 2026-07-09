@@ -16,6 +16,9 @@ import {
 import { ToastProvider, useToast } from './components/ToastContext';
 import { MetricPanelSkeleton, JobRowSkeleton } from './components/Skeleton';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ArtisansView } from './components/ArtisansView';
+
+type NavView = 'jobs' | 'artisans' | 'settlements' | 'disputes';
 
 type JobState = "Open" | "Active" | "Disputed" | "Completed" | "Refunded";
 
@@ -95,6 +98,7 @@ function formatCurrency(value: number) {
 }
 
 function AppContent() {
+  const [activeView, setActiveView] = useState<NavView>('jobs');
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [creatingJob, setCreatingJob] = useState(false);
@@ -157,22 +161,64 @@ function AppContent() {
           <span>OW</span>
         </div>
         <nav className="rail" aria-label="Primary">
-          <button className="rail-button active" aria-label="Jobs">
+          <button
+            className={`rail-button ${activeView === 'jobs' ? 'active' : ''}`}
+            aria-label="Jobs"
+            aria-current={activeView === 'jobs' ? 'page' : undefined}
+            onClick={() => setActiveView('jobs')}
+          >
             <BriefcaseBusiness size={20} />
           </button>
-          <button className="rail-button" aria-label="Artisans">
+          <button
+            className={`rail-button ${activeView === 'artisans' ? 'active' : ''}`}
+            aria-label="Artisans"
+            aria-current={activeView === 'artisans' ? 'page' : undefined}
+            onClick={() => setActiveView('artisans')}
+          >
             <UsersRound size={20} />
           </button>
-          <button className="rail-button" aria-label="Settlements">
+          <button
+            className={`rail-button ${activeView === 'settlements' ? 'active' : ''}`}
+            aria-label="Settlements"
+            aria-current={activeView === 'settlements' ? 'page' : undefined}
+            onClick={() => setActiveView('settlements')}
+          >
             <CircleDollarSign size={20} />
           </button>
-          <button className="rail-button" aria-label="Disputes">
+          <button
+            className={`rail-button ${activeView === 'disputes' ? 'active' : ''}`}
+            aria-label="Disputes"
+            aria-current={activeView === 'disputes' ? 'page' : undefined}
+            onClick={() => setActiveView('disputes')}
+          >
             <Gavel size={20} />
           </button>
         </nav>
       </aside>
 
       <section className="workspace">
+        {activeView === 'artisans' ? (
+          <ArtisansView
+            onHireNavigate={(artisanId) => {
+              addToast({
+                type: 'info',
+                message: `Opening job creation with artisan pre-selected (ID: ${artisanId}).`
+              });
+              setActiveView('jobs');
+            }}
+          />
+        ) : activeView === 'settlements' ? (
+          <div className="placeholder-view">
+            <p className="eyebrow">Coming soon</p>
+            <h1>Settlements</h1>
+          </div>
+        ) : activeView === 'disputes' ? (
+          <div className="placeholder-view">
+            <p className="eyebrow">Coming soon</p>
+            <h1>Disputes</h1>
+          </div>
+        ) : (
+          <>
         <header className="topbar">
           <div>
             <p className="eyebrow">Escrow desk</p>
@@ -317,6 +363,8 @@ function AppContent() {
             </article>
           </aside>
         </section>
+        </>
+        )}
       </section>
     </main>
   );
