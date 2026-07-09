@@ -150,6 +150,9 @@ cd frontend
 npm run dev
 npm run build
 npm run preview
+npm run test
+npm run test:coverage
+npm run test:ui
 ```
 
 Recommended next steps:
