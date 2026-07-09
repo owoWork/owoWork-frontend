@@ -1,11 +1,18 @@
 # Dependencies
 node_modules/
+frontend/node_modules/
 
 # Build outputs
 dist/
 build/
 out/
 target/
+frontend/dist/
+frontend/build/
+frontend/tsconfig.tsbuildinfo
+
+# Package lock files
+frontend/package-lock.json
 
 # Environment files
 .env
