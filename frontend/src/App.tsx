@@ -16,6 +16,9 @@ import {
 import { ToastProvider, useToast } from './components/ToastContext';
 import { MetricPanelSkeleton, JobRowSkeleton } from './components/Skeleton';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { DisputeDashboard, DisputeDetail, mockDisputes, type Dispute } from './components/DisputeResolution';
+
+type View = 'jobs' | 'disputes';
 
 type JobState = "Open" | "Active" | "Disputed" | "Completed" | "Refunded";
 
@@ -95,6 +98,9 @@ function formatCurrency(value: number) {
 }
 
 function AppContent() {
+  const [view, setView] = useState<View>('jobs');
+  const [selectedDispute, setSelectedDispute] = useState<Dispute | null>(null);
+  const [disputes, setDisputes] = useState<Dispute[]>(mockDisputes);
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [creatingJob, setCreatingJob] = useState(false);
@@ -146,9 +152,14 @@ function AppContent() {
     });
   };
 
+  const handleDisputeResolved = (updated: Dispute) => {
+    setDisputes((prev) => prev.map((d) => d.id === updated.id ? updated : d));
+    setSelectedDispute(updated);
+  };
+
   const activeValue = jobs.reduce((total, job) => total + job.amount, 0);
   const activeJobs = jobs.filter((job) => job.state === "Active").length;
-  const disputes = jobs.filter((job) => job.state === "Disputed").length;
+  const disputedJobs = jobs.filter((job) => job.state === "Disputed").length;
 
   return (
     <main className="shell">
@@ -157,7 +168,11 @@ function AppContent() {
           <span>OW</span>
         </div>
         <nav className="rail" aria-label="Primary">
-          <button className="rail-button active" aria-label="Jobs">
+          <button
+            className={`rail-button ${view === 'jobs' ? 'active' : ''}`}
+            aria-label="Jobs"
+            onClick={() => { setView('jobs'); setSelectedDispute(null); }}
+          >
             <BriefcaseBusiness size={20} />
           </button>
           <button className="rail-button" aria-label="Artisans">
@@ -166,13 +181,32 @@ function AppContent() {
           <button className="rail-button" aria-label="Settlements">
             <CircleDollarSign size={20} />
           </button>
-          <button className="rail-button" aria-label="Disputes">
+          <button
+            className={`rail-button ${view === 'disputes' ? 'active' : ''}`}
+            aria-label="Disputes"
+            onClick={() => { setView('disputes'); setSelectedDispute(null); }}
+          >
             <Gavel size={20} />
           </button>
         </nav>
       </aside>
 
       <section className="workspace">
+        {view === 'disputes' ? (
+          selectedDispute ? (
+            <DisputeDetail
+              dispute={selectedDispute}
+              onBack={() => setSelectedDispute(null)}
+              onResolved={handleDisputeResolved}
+            />
+          ) : (
+            <DisputeDashboard
+              disputes={disputes}
+              onSelect={(d) => setSelectedDispute(d)}
+            />
+          )
+        ) : (
+          <>
         <header className="topbar">
           <div>
             <p className="eyebrow">Escrow desk</p>
@@ -227,7 +261,7 @@ function AppContent() {
                   <AlertTriangle size={22} />
                 </span>
                 <p>Disputes</p>
-                <strong>{disputes}</strong>
+                <strong>{disputedJobs}</strong>
                 <small>48 hour resolution window</small>
               </article>
             </>
@@ -317,6 +351,8 @@ function AppContent() {
             </article>
           </aside>
         </section>
+          </>
+        )}
       </section>
     </main>
   );
