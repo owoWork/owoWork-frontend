@@ -64,11 +64,12 @@ export interface Dispute {
 
 const now = new Date();
 const in30h = new Date(now.getTime() + 30 * 60 * 60 * 1000).toISOString();
-const in5h  = new Date(now.getTime() +  5 * 60 * 60 * 1000).toISOString();
-const ago2h = new Date(now.getTime() -  2 * 60 * 60 * 1000).toISOString();
+const in5h = new Date(now.getTime() + 5 * 60 * 60 * 1000).toISOString();
+const ago2h = new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString();
 const ago18h = new Date(now.getTime() - 18 * 60 * 60 * 1000).toISOString();
 
 export const mockDisputes: Dispute[] = [
+
   {
     id: 'DSP-001',
     jobId: 'OWO-1043',
@@ -174,7 +175,7 @@ function CountdownTimer({ deadline }: CountdownProps) {
   const calc = useCallback(() => {
     const diff = new Date(deadline).getTime() - Date.now();
     if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0, expired: true, urgent: true };
-    const hours   = Math.floor(diff / 3_600_000);
+    const hours = Math.floor(diff / 3_600_000);
     const minutes = Math.floor((diff % 3_600_000) / 60_000);
     const seconds = Math.floor((diff % 60_000) / 1_000);
     return { hours, minutes, seconds, expired: false, urgent: hours < 6 };
@@ -332,9 +333,9 @@ interface TimelineProps {
 
 function DisputeTimeline({ dispute }: TimelineProps) {
   const entries = [
-    { label: 'Job started',       time: dispute.jobStarted,          icon: <Calendar size={14} /> },
-    { label: 'Dispute raised',    time: dispute.disputeRaisedAt,      icon: <AlertTriangle size={14} /> },
-    { label: 'Resolution window', time: dispute.resolutionDeadline,   icon: <Clock size={14} />, deadline: true },
+    { label: 'Job started', time: dispute.jobStarted, icon: <Calendar size={14} /> },
+    { label: 'Dispute raised', time: dispute.disputeRaisedAt, icon: <AlertTriangle size={14} /> },
+    { label: 'Resolution window', time: dispute.resolutionDeadline, icon: <Clock size={14} />, deadline: true },
   ];
 
   if (dispute.resolvedAt) {
@@ -578,13 +579,15 @@ export function DisputeDetail({ dispute: initial, onBack, onResolved }: DisputeD
 interface DisputeDashboardProps {
   disputes: Dispute[];
   onSelect: (dispute: Dispute) => void;
+  onBack?: () => void; // optional to keep App compatibility
 }
+
 
 export function DisputeDashboard({ disputes, onSelect }: DisputeDashboardProps) {
   const [filter, setFilter] = useState<'all' | 'pending' | 'resolved'>('pending');
 
   const filtered = filter === 'all' ? disputes : disputes.filter((d) => d.status === filter);
-  const pendingCount  = disputes.filter((d) => d.status === 'pending').length;
+  const pendingCount = disputes.filter((d) => d.status === 'pending').length;
   const resolvedCount = disputes.filter((d) => d.status === 'resolved').length;
 
   return (
