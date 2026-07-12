@@ -52,8 +52,9 @@ export const JobsByStatusChart: React.FC<JobsByStatusProps> = ({ data }) => {
           ))}
         </Pie>
         <Tooltip
-          formatter={(value: unknown, name: unknown) => [value, name]}
+          formatter={(value: any, name: any) => [String(value), String(name)]}
           contentStyle={{
+
             background: "#fff8e7",
             border: "2px solid #17211d",
             borderRadius: "8px",
