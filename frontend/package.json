@@ -13,12 +13,15 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["vitest run"]
+    "*.{ts,tsx}": [
+      "vitest run"
+    ]
   },
   "dependencies": {
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.91.0",
     "recharts": "^3.9.2"
   },
   "devDependencies": {
